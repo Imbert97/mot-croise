@@ -1,13 +1,1774 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Interactive Kids Crossword Learning App</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mots Croisés Magiques 🌟</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .title {
+            font-size: 3em;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+            animation: bounce 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes bounce {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-10px); }
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #f0f0f0;
+            margin-bottom: 30px;
+        }
+
+        .mode-selector {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .mode-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .mode-btn.teacher {
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            color: white;
+        }
+
+        .mode-btn.student {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+        }
+
+        .mode-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .mode-btn.active {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+
+        .mode-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .mode-section.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .teacher-section h2, .student-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 2em;
+        }
+
+        .word-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .word-input, .clue-input {
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1.1em;
+            transition: border-color 0.3s ease;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .word-input:focus, .clue-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .add-word-btn {
+            padding: 12px 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-word-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .words-list {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .word-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .word-item:hover {
+            transform: translateX(5px);
+        }
+
+        .word-text {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .clue-text {
+            color: #666;
+            font-style: italic;
+        }
+
+        .delete-word-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+
+        .delete-word-btn:hover {
+            background: #ff5252;
+            transform: scale(1.1);
+        }
+
+        .generate-btn {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 15px 30px;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .generate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .crossword-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .grid-container {
+            flex: 2;
+            min-width: 400px;
+        }
+
+        .crossword-grid {
+            display: grid;
+            gap: 2px;
+            background: var(--grid-bg);
+            padding: 10px;
+            border-radius: 10px;
+            justify-content: center;
+            margin: 0 auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border: 3px solid var(--grid-border);
+        }
+
+        .cell {
+            width: 35px;
+            height: 35px;
+            background: var(--cell-bg);
+            border: 2px solid var(--cell-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            position: relative;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .cell.blocked {
+            background: var(--blocked-bg);
+            border: 2px solid var(--blocked-border);
+            color: #fff;
+            font-size: 1.2em;
+            cursor: default;
+        }
+
+        .cell.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            animation: pulse 1s ease-in-out infinite alternate;
+        }
+
+        .cell.correct {
+            background: var(--correct-bg);
+            color: white;
+            border-color: var(--correct-border);
+        }
+
+        .cell.word-complete {
+            animation: wordCompleteAnimation 1s ease;
+        }
+
+        @keyframes wordCompleteAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); background: #f39c12; }
+            100% { transform: scale(1); }
+        }
+
+        .cell.error {
+            animation: errorShake 0.5s ease;
+        }
+
+        @keyframes errorShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-3px); }
+            75% { transform: translateX(3px); }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7); }
+            100% { box-shadow: 0 0 0 10px rgba(102, 126, 234, 0); }
+        }
+
+        @keyframes correctBounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .cell-number {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            font-size: 0.7em;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .cell input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: transparent;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .cell input:focus {
+            outline: none;
+        }
+
+        .clues-container {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .clues-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .clues-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.5em;
+        }
+
+        .clue-item {
+            padding: 10px 15px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid #667eea;
+        }
+
+        .clue-item:hover {
+            background: #667eea;
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .clue-item.completed {
+            background: #4ecdc4;
+            color: white;
+            border-left-color: #44a08d;
+        }
+
+        .clue-number {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 15px;
+            height: 20px;
+            margin: 20px 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            height: 100%;
+            border-radius: 15px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff6b6b;
+            animation: confettiFall 3s linear infinite;
+        }
+
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        .star {
+            position: fixed;
+            font-size: 2em;
+            color: gold;
+            animation: starTwinkle 1s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        @keyframes starTwinkle {
+            0% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.3) rotate(180deg);
+                opacity: 0.7;
+            }
+        }
+
+        .victory-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 40px 60px;
+            border-radius: 25px;
+            text-align: center;
+            font-size: 2em;
+            font-weight: bold;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            z-index: 1001;
+            display: none;
+            animation: victoryBounce 0.8s ease-out;
+        }
+
+        @keyframes victoryBounce {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .input-type-selector {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .radio-option:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .radio-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #667eea;
+        }
+
+        .verb-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .verb-select, .person-select, .tense-select {
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1.1em;
+            transition: border-color 0.3s ease;
+            flex: 1;
+            min-width: 150px;
+            background: white;
+        }
+
+        .verb-select:focus, .person-select:focus, .tense-select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .reset-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ff5252);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Sélecteur de thèmes */
+        .theme-selector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .theme-label {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .theme-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .theme-btn {
+            width: 50px;
+            height: 50px;
+            border: 3px solid transparent;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .theme-btn.active {
+            border-color: #667eea;
+            transform: scale(1.2);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+        }
+
+        /* Thèmes de couleurs */
+        :root {
+            --grid-bg: #333;
+            --grid-border: #333;
+            --cell-bg: white;
+            --cell-border: #333;
+            --blocked-bg: #000;
+            --blocked-border: #333;
+            --correct-bg: #4ecdc4;
+            --correct-border: #4ecdc4;
+        }
+
+        /* Thème Blanc */
+        .theme-white {
+            --grid-bg: #f0f0f0;
+            --grid-border: #ddd;
+            --cell-bg: white;
+            --cell-border: #ccc;
+            --blocked-bg: #e0e0e0;
+            --blocked-border: #ccc;
+            --correct-bg: #5cb85c;
+            --correct-border: #5cb85c;
+        }
+
+        /* Thème Rose */
+        .theme-pink {
+            --grid-bg: #fce4ec;
+            --grid-border: #f8bbd9;
+            --cell-bg: #fff0f3;
+            --cell-border: #f8bbd9;
+            --blocked-bg: #e91e63;
+            --blocked-border: #f8bbd9;
+            --correct-bg: #ff69b4;
+            --correct-border: #ff69b4;
+        }
+
+        /* Thème Bleu */
+        .theme-blue {
+            --grid-bg: #e3f2fd;
+            --grid-border: #90caf9;
+            --cell-bg: #f8fcff;
+            --cell-border: #90caf9;
+            --blocked-bg: #1976d2;
+            --blocked-border: #90caf9;
+            --correct-bg: #2196f3;
+            --correct-border: #2196f3;
+        }
+
+        /* Thème Vert */
+        .theme-green {
+            --grid-bg: #e8f5e8;
+            --grid-border: #a5d6a7;
+            --cell-bg: #f1f8e9;
+            --cell-border: #a5d6a7;
+            --blocked-bg: #388e3c;
+            --blocked-border: #a5d6a7;
+            --correct-bg: #4caf50;
+            --correct-border: #4caf50;
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2em;
+            }
+            
+            .crossword-container {
+                flex-direction: column;
+            }
+            
+            .cell {
+                width: 30px;
+                height: 30px;
+                font-size: 1em;
+            }
+            
+            .mode-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .word-input-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">Mots Croisés Magiques 🌟</h1>
+            <p class="subtitle">Apprendre en s'amusant !</p>
+            
+            <div class="mode-selector">
+                <button class="mode-btn teacher active" onclick="switchMode('teacher')">
+                    👩‍🏫 Mode Professeur
+                </button>
+                <button class="mode-btn student" onclick="switchMode('student')">
+                    👧 Mode Étudiant
+                </button>
+            </div>
+            
+            <!-- Sélecteur de thèmes -->
+            <div class="theme-selector">
+                <label class="theme-label">🎨 Thème de couleur :</label>
+                <div class="theme-options">
+                    <button class="theme-btn" data-theme="classic" title="Classique Noir">🏴</button>
+                    <button class="theme-btn" data-theme="white" title="Blanc Pur">⚪</button>
+                    <button class="theme-btn active" data-theme="pink" title="Rose Mignon">🌸</button>
+                    <button class="theme-btn" data-theme="blue" title="Bleu Océan">🌊</button>
+                    <button class="theme-btn" data-theme="green" title="Vert Nature">🌿</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Mode Professeur -->
+        <section class="mode-section teacher-section active">
+            <h2>📝 Créer une grille de mots croisés</h2>
+            
+            <div class="input-type-selector">
+                <label class="radio-option">
+                    <input type="radio" name="inputType" value="normal" checked onchange="toggleInputMode()">
+                    <span>📝 Mot normal</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="inputType" value="verb" onchange="toggleInputMode()">
+                    <span>🔤 Conjugaison de verbe</span>
+                </label>
+            </div>
+            
+            <div class="word-input-container" id="normalInput">
+                <input type="text" class="word-input" placeholder="Mot à deviner" id="wordInput">
+                <input type="text" class="clue-input" placeholder="Indice pour ce mot" id="clueInput">
+                <button class="add-word-btn" onclick="addWord()">➕ Ajouter</button>
+            </div>
+            
+            <div class="verb-input-container" id="verbInput" style="display: none;">
+                <select class="verb-select" id="verbSelect">
+                    <option value="">Choisir un verbe...</option>
+                </select>
+                <select class="person-select" id="personSelect">
+                    <option value="1s">1ère pers. singulier (je)</option>
+                    <option value="2s">2ème pers. singulier (tu)</option>
+                    <option value="3s">3ème pers. singulier (il/elle)</option>
+                    <option value="1p">1ère pers. pluriel (nous)</option>
+                    <option value="2p">2ème pers. pluriel (vous)</option>
+                    <option value="3p">3ème pers. pluriel (ils/elles)</option>
+                </select>
+                <select class="tense-select" id="tenseSelect">
+                    <option value="present">Présent</option>
+                    <option value="passe_compose">Passé composé</option>
+                    <option value="imparfait">Imparfait</option>
+                    <option value="futur">Futur</option>
+                    <option value="conditionnel">Conditionnel</option>
+                    <option value="subjonctif">Subjonctif présent</option>
+                </select>
+                <button class="add-word-btn" onclick="addVerb()">➕ Ajouter verbe</button>
+            </div>
+            
+            <div class="words-list" id="wordsList">
+                <p style="text-align: center; color: #666; font-style: italic;">
+                    Ajoutez des mots et leurs indices pour créer votre grille !
+                </p>
+            </div>
+            
+            <button class="generate-btn" onclick="generateCrossword()" id="generateBtn" style="display: none;">
+                🎯 Générer la grille magique !
+            </button>
+            
+            <div id="teacherPreview"></div>
+        </section>
+
+        <!-- Mode Étudiant -->
+        <section class="mode-section student-section">
+            <h2>🎮 Résoudre les mots croisés</h2>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%">
+                    <div class="progress-text" id="progressText">0% complété</div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-bottom: 20px;">
+                <button class="reset-btn" onclick="resetGame()">🔄 Recommencer</button>
+            </div>
+            
+            <div class="crossword-container" id="gameContainer">
+                <p style="text-align: center; color: #666; font-size: 1.2em;">
+                    Créez d'abord une grille en mode professeur ! 👩‍🏫
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Éléments pour les animations -->
+    <div class="celebration" id="celebration"></div>
+    <div class="victory-message" id="victoryMessage">
+        🎉 Bravo ! Tu as terminé ! 🎉<br>
+        <span style="font-size: 0.6em;">Tu es une vraie championne ! ⭐</span>
+    </div>
+
+    <script>
+        // Variables globales
+        let words = [];
+        let crosswordGrid = [];
+        let gridSize = 15;
+        let currentWord = null;
+        let completedWords = 0;
+        let totalWords = 0;
+        let gameData = null;
+
+        // Bibliothèque de verbes français avec conjugaisons
+        const verbLibrary = {
+            "manger": {
+                "present": {"1s": "mange", "2s": "manges", "3s": "mange", "1p": "mangeons", "2p": "mangez", "3p": "mangent"},
+                "passe_compose": {"1s": "ai mangé", "2s": "as mangé", "3s": "a mangé", "1p": "avons mangé", "2p": "avez mangé", "3p": "ont mangé"},
+                "imparfait": {"1s": "mangeais", "2s": "mangeais", "3s": "mangeait", "1p": "mangions", "2p": "mangiez", "3p": "mangeaient"},
+                "futur": {"1s": "mangerai", "2s": "mangeras", "3s": "mangera", "1p": "mangerons", "2p": "mangerez", "3p": "mangeront"},
+                "conditionnel": {"1s": "mangerais", "2s": "mangerais", "3s": "mangerait", "1p": "mangerions", "2p": "mangeriez", "3p": "mangeraient"},
+                "subjonctif": {"1s": "mange", "2s": "manges", "3s": "mange", "1p": "mangions", "2p": "mangiez", "3p": "mangent"}
+            },
+            "être": {
+                "present": {"1s": "suis", "2s": "es", "3s": "est", "1p": "sommes", "2p": "êtes", "3p": "sont"},
+                "passe_compose": {"1s": "ai été", "2s": "as été", "3s": "a été", "1p": "avons été", "2p": "avez été", "3p": "ont été"},
+                "imparfait": {"1s": "étais", "2s": "étais", "3s": "était", "1p": "étions", "2p": "étiez", "3p": "étaient"},
+                "futur": {"1s": "serai", "2s": "seras", "3s": "sera", "1p": "serons", "2p": "serez", "3p": "seront"},
+                "conditionnel": {"1s": "serais", "2s": "serais", "3s": "serait", "1p": "serions", "2p": "seriez", "3p": "seraient"},
+                "subjonctif": {"1s": "sois", "2s": "sois", "3s": "soit", "1p": "soyons", "2p": "soyez", "3p": "soient"}
+            },
+            "avoir": {
+                "present": {"1s": "ai", "2s": "as", "3s": "a", "1p": "avons", "2p": "avez", "3p": "ont"},
+                "passe_compose": {"1s": "ai eu", "2s": "as eu", "3s": "a eu", "1p": "avons eu", "2p": "avez eu", "3p": "ont eu"},
+                "imparfait": {"1s": "avais", "2s": "avais", "3s": "avait", "1p": "avions", "2p": "aviez", "3p": "avaient"},
+                "futur": {"1s": "aurai", "2s": "auras", "3s": "aura", "1p": "aurons", "2p": "aurez", "3p": "auront"},
+                "conditionnel": {"1s": "aurais", "2s": "aurais", "3s": "aurait", "1p": "aurions", "2p": "auriez", "3p": "auraient"},
+                "subjonctif": {"1s": "aie", "2s": "aies", "3s": "ait", "1p": "ayons", "2p": "ayez", "3p": "aient"}
+            },
+            "aller": {
+                "present": {"1s": "vais", "2s": "vas", "3s": "va", "1p": "allons", "2p": "allez", "3p": "vont"},
+                "passe_compose": {"1s": "suis allé", "2s": "es allé", "3s": "est allé", "1p": "sommes allés", "2p": "êtes allés", "3p": "sont allés"},
+                "imparfait": {"1s": "allais", "2s": "allais", "3s": "allait", "1p": "allions", "2p": "alliez", "3p": "allaient"},
+                "futur": {"1s": "irai", "2s": "iras", "3s": "ira", "1p": "irons", "2p": "irez", "3p": "iront"},
+                "conditionnel": {"1s": "irais", "2s": "irais", "3s": "irait", "1p": "irions", "2p": "iriez", "3p": "iraient"},
+                "subjonctif": {"1s": "aille", "2s": "ailles", "3s": "aille", "1p": "allions", "2p": "alliez", "3p": "aillent"}
+            },
+            "faire": {
+                "present": {"1s": "fais", "2s": "fais", "3s": "fait", "1p": "faisons", "2p": "faites", "3p": "font"},
+                "passe_compose": {"1s": "ai fait", "2s": "as fait", "3s": "a fait", "1p": "avons fait", "2p": "avez fait", "3p": "ont fait"},
+                "imparfait": {"1s": "faisais", "2s": "faisais", "3s": "faisait", "1p": "faisions", "2p": "faisiez", "3p": "faisaient"},
+                "futur": {"1s": "ferai", "2s": "feras", "3s": "fera", "1p": "ferons", "2p": "ferez", "3p": "feront"},
+                "conditionnel": {"1s": "ferais", "2s": "ferais", "3s": "ferait", "1p": "ferions", "2p": "feriez", "3p": "feraient"},
+                "subjonctif": {"1s": "fasse", "2s": "fasses", "3s": "fasse", "1p": "fassions", "2p": "fassiez", "3p": "fassent"}
+            },
+            "dire": {
+                "present": {"1s": "dis", "2s": "dis", "3s": "dit", "1p": "disons", "2p": "dites", "3p": "disent"},
+                "passe_compose": {"1s": "ai dit", "2s": "as dit", "3s": "a dit", "1p": "avons dit", "2p": "avez dit", "3p": "ont dit"},
+                "imparfait": {"1s": "disais", "2s": "disais", "3s": "disait", "1p": "disions", "2p": "disiez", "3p": "disaient"},
+                "futur": {"1s": "dirai", "2s": "diras", "3s": "dira", "1p": "dirons", "2p": "direz", "3p": "diront"},
+                "conditionnel": {"1s": "dirais", "2s": "dirais", "3s": "dirait", "1p": "dirions", "2p": "diriez", "3p": "diraient"},
+                "subjonctif": {"1s": "dise", "2s": "dises", "3s": "dise", "1p": "disions", "2p": "disiez", "3p": "disent"}
+            },
+            "voir": {
+                "present": {"1s": "vois", "2s": "vois", "3s": "voit", "1p": "voyons", "2p": "voyez", "3p": "voient"},
+                "passe_compose": {"1s": "ai vu", "2s": "as vu", "3s": "a vu", "1p": "avons vu", "2p": "avez vu", "3p": "ont vu"},
+                "imparfait": {"1s": "voyais", "2s": "voyais", "3s": "voyait", "1p": "voyions", "2p": "voyiez", "3p": "voyaient"},
+                "futur": {"1s": "verrai", "2s": "verras", "3s": "verra", "1p": "verrons", "2p": "verrez", "3p": "verront"},
+                "conditionnel": {"1s": "verrais", "2s": "verrais", "3s": "verrait", "1p": "verrions", "2p": "verriez", "3p": "verraient"},
+                "subjonctif": {"1s": "voie", "2s": "voies", "3s": "voie", "1p": "voyions", "2p": "voyiez", "3p": "voient"}
+            },
+            "donner": {
+                "present": {"1s": "donne", "2s": "donnes", "3s": "donne", "1p": "donnons", "2p": "donnez", "3p": "donnent"},
+                "passe_compose": {"1s": "ai donné", "2s": "as donné", "3s": "a donné", "1p": "avons donné", "2p": "avez donné", "3p": "ont donné"},
+                "imparfait": {"1s": "donnais", "2s": "donnais", "3s": "donnait", "1p": "donnions", "2p": "donniez", "3p": "donnaient"},
+                "futur": {"1s": "donnerai", "2s": "donneras", "3s": "donnera", "1p": "donnerons", "2p": "donnerez", "3p": "donneront"},
+                "conditionnel": {"1s": "donnerais", "2s": "donnerais", "3s": "donnerait", "1p": "donnerions", "2p": "donneriez", "3p": "donneraient"},
+                "subjonctif": {"1s": "donne", "2s": "donnes", "3s": "donne", "1p": "donnions", "2p": "donniez", "3p": "donnent"}
+            },
+            "prendre": {
+                "present": {"1s": "prends", "2s": "prends", "3s": "prend", "1p": "prenons", "2p": "prenez", "3p": "prennent"},
+                "passe_compose": {"1s": "ai pris", "2s": "as pris", "3s": "a pris", "1p": "avons pris", "2p": "avez pris", "3p": "ont pris"},
+                "imparfait": {"1s": "prenais", "2s": "prenais", "3s": "prenait", "1p": "prenions", "2p": "preniez", "3p": "prenaient"},
+                "futur": {"1s": "prendrai", "2s": "prendras", "3s": "prendra", "1p": "prendrons", "2p": "prendrez", "3p": "prendront"},
+                "conditionnel": {"1s": "prendrais", "2s": "prendrais", "3s": "prendrait", "1p": "prendrions", "2p": "prendriez", "3p": "prendraient"},
+                "subjonctif": {"1s": "prenne", "2s": "prennes", "3s": "prenne", "1p": "prenions", "2p": "preniez", "3p": "prennent"}
+            },
+            "venir": {
+                "present": {"1s": "viens", "2s": "viens", "3s": "vient", "1p": "venons", "2p": "venez", "3p": "viennent"},
+                "passe_compose": {"1s": "suis venu", "2s": "es venu", "3s": "est venu", "1p": "sommes venus", "2p": "êtes venus", "3p": "sont venus"},
+                "imparfait": {"1s": "venais", "2s": "venais", "3s": "venait", "1p": "venions", "2p": "veniez", "3p": "venaient"},
+                "futur": {"1s": "viendrai", "2s": "viendras", "3s": "viendra", "1p": "viendrons", "2p": "viendrez", "3p": "viendront"},
+                "conditionnel": {"1s": "viendrais", "2s": "viendrais", "3s": "viendrait", "1p": "viendrions", "2p": "viendriez", "3p": "viendraient"},
+                "subjonctif": {"1s": "vienne", "2s": "viennes", "3s": "vienne", "1p": "venions", "2p": "veniez", "3p": "viennent"}
+            },
+            "pouvoir": {
+                "present": {"1s": "peux", "2s": "peux", "3s": "peut", "1p": "pouvons", "2p": "pouvez", "3p": "peuvent"},
+                "passe_compose": {"1s": "ai pu", "2s": "as pu", "3s": "a pu", "1p": "avons pu", "2p": "avez pu", "3p": "ont pu"},
+                "imparfait": {"1s": "pouvais", "2s": "pouvais", "3s": "pouvait", "1p": "pouvions", "2p": "pouviez", "3p": "pouvaient"},
+                "futur": {"1s": "pourrai", "2s": "pourras", "3s": "pourra", "1p": "pourrons", "2p": "pourrez", "3p": "pourront"},
+                "conditionnel": {"1s": "pourrais", "2s": "pourrais", "3s": "pourrait", "1p": "pourrions", "2p": "pourriez", "3p": "pourraient"},
+                "subjonctif": {"1s": "puisse", "2s": "puisses", "3s": "puisse", "1p": "puissions", "2p": "puissiez", "3p": "puissent"}
+            },
+            "vouloir": {
+                "present": {"1s": "veux", "2s": "veux", "3s": "veut", "1p": "voulons", "2p": "voulez", "3p": "veulent"},
+                "passe_compose": {"1s": "ai voulu", "2s": "as voulu", "3s": "a voulu", "1p": "avons voulu", "2p": "avez voulu", "3p": "ont voulu"},
+                "imparfait": {"1s": "voulais", "2s": "voulais", "3s": "voulait", "1p": "voulions", "2p": "vouliez", "3p": "voulaient"},
+                "futur": {"1s": "voudrai", "2s": "voudras", "3s": "voudra", "1p": "voudrons", "2p": "voudrez", "3p": "voudront"},
+                "conditionnel": {"1s": "voudrais", "2s": "voudrais", "3s": "voudrait", "1p": "voudrions", "2p": "voudriez", "3p": "voudraient"},
+                "subjonctif": {"1s": "veuille", "2s": "veuilles", "3s": "veuille", "1p": "voulions", "2p": "vouliez", "3p": "veuillent"}
+            },
+            "savoir": {
+                "present": {"1s": "sais", "2s": "sais", "3s": "sait", "1p": "savons", "2p": "savez", "3p": "savent"},
+                "passe_compose": {"1s": "ai su", "2s": "as su", "3s": "a su", "1p": "avons su", "2p": "avez su", "3p": "ont su"},
+                "imparfait": {"1s": "savais", "2s": "savais", "3s": "savait", "1p": "savions", "2p": "saviez", "3p": "savaient"},
+                "futur": {"1s": "saurai", "2s": "sauras", "3s": "saura", "1p": "saurons", "2p": "saurez", "3p": "sauront"},
+                "conditionnel": {"1s": "saurais", "2s": "saurais", "3s": "saurait", "1p": "saurions", "2p": "sauriez", "3p": "sauraient"},
+                "subjonctif": {"1s": "sache", "2s": "saches", "3s": "sache", "1p": "sachions", "2p": "sachiez", "3p": "sachent"}
+            },
+            "devoir": {
+                "present": {"1s": "dois", "2s": "dois", "3s": "doit", "1p": "devons", "2p": "devez", "3p": "doivent"},
+                "passe_compose": {"1s": "ai dû", "2s": "as dû", "3s": "a dû", "1p": "avons dû", "2p": "avez dû", "3p": "ont dû"},
+                "imparfait": {"1s": "devais", "2s": "devais", "3s": "devait", "1p": "devions", "2p": "deviez", "3p": "devaient"},
+                "futur": {"1s": "devrai", "2s": "devras", "3s": "devra", "1p": "devrons", "2p": "devrez", "3p": "devront"},
+                "conditionnel": {"1s": "devrais", "2s": "devrais", "3s": "devrait", "1p": "devrions", "2p": "devriez", "3p": "devraient"},
+                "subjonctif": {"1s": "doive", "2s": "doives", "3s": "doive", "1p": "devions", "2p": "deviez", "3p": "doivent"}
+            },
+            "partir": {
+                "present": {"1s": "pars", "2s": "pars", "3s": "part", "1p": "partons", "2p": "partez", "3p": "partent"},
+                "passe_compose": {"1s": "suis parti", "2s": "es parti", "3s": "est parti", "1p": "sommes partis", "2p": "êtes partis", "3p": "sont partis"},
+                "imparfait": {"1s": "partais", "2s": "partais", "3s": "partait", "1p": "partions", "2p": "partiez", "3p": "partaient"},
+                "futur": {"1s": "partirai", "2s": "partiras", "3s": "partira", "1p": "partirons", "2p": "partirez", "3p": "partiront"},
+                "conditionnel": {"1s": "partirais", "2s": "partirais", "3s": "partirait", "1p": "partirions", "2p": "partiriez", "3p": "partiraient"},
+                "subjonctif": {"1s": "parte", "2s": "partes", "3s": "parte", "1p": "partions", "2p": "partiez", "3p": "partent"}
+            },
+            "sortir": {
+                "present": {"1s": "sors", "2s": "sors", "3s": "sort", "1p": "sortons", "2p": "sortez", "3p": "sortent"},
+                "passe_compose": {"1s": "suis sorti", "2s": "es sorti", "3s": "est sorti", "1p": "sommes sortis", "2p": "êtes sortis", "3p": "sont sortis"},
+                "imparfait": {"1s": "sortais", "2s": "sortais", "3s": "sortait", "1p": "sortions", "2p": "sortiez", "3p": "sortaient"},
+                "futur": {"1s": "sortirai", "2s": "sortiras", "3s": "sortira", "1p": "sortirons", "2p": "sortirez", "3p": "sortiront"},
+                "conditionnel": {"1s": "sortirais", "2s": "sortirais", "3s": "sortirait", "1p": "sortirions", "2p": "sortiriez", "3p": "sortiraient"},
+                "subjonctif": {"1s": "sorte", "2s": "sortes", "3s": "sorte", "1p": "sortions", "2p": "sortiez", "3p": "sortent"}
+            },
+            "mettre": {
+                "present": {"1s": "mets", "2s": "mets", "3s": "met", "1p": "mettons", "2p": "mettez", "3p": "mettent"},
+                "passe_compose": {"1s": "ai mis", "2s": "as mis", "3s": "a mis", "1p": "avons mis", "2p": "avez mis", "3p": "ont mis"},
+                "imparfait": {"1s": "mettais", "2s": "mettais", "3s": "mettait", "1p": "mettions", "2p": "mettiez", "3p": "mettaient"},
+                "futur": {"1s": "mettrai", "2s": "mettras", "3s": "mettra", "1p": "mettrons", "2p": "mettrez", "3p": "mettront"},
+                "conditionnel": {"1s": "mettrais", "2s": "mettrais", "3s": "mettrait", "1p": "mettrions", "2p": "mettriez", "3p": "mettraient"},
+                "subjonctif": {"1s": "mette", "2s": "mettes", "3s": "mette", "1p": "mettions", "2p": "mettiez", "3p": "mettent"}
+            },
+            "lire": {
+                "present": {"1s": "lis", "2s": "lis", "3s": "lit", "1p": "lisons", "2p": "lisez", "3p": "lisent"},
+                "passe_compose": {"1s": "ai lu", "2s": "as lu", "3s": "a lu", "1p": "avons lu", "2p": "avez lu", "3p": "ont lu"},
+                "imparfait": {"1s": "lisais", "2s": "lisais", "3s": "lisait", "1p": "lisions", "2p": "lisiez", "3p": "lisaient"},
+                "futur": {"1s": "lirai", "2s": "liras", "3s": "lira", "1p": "lirons", "2p": "lirez", "3p": "liront"},
+                "conditionnel": {"1s": "lirais", "2s": "lirais", "3s": "lirait", "1p": "lirions", "2p": "liriez", "3p": "liraient"},
+                "subjonctif": {"1s": "lise", "2s": "lises", "3s": "lise", "1p": "lisions", "2p": "lisiez", "3p": "lisent"}
+            },
+            "écrire": {
+                "present": {"1s": "écris", "2s": "écris", "3s": "écrit", "1p": "écrivons", "2p": "écrivez", "3p": "écrivent"},
+                "passe_compose": {"1s": "ai écrit", "2s": "as écrit", "3s": "a écrit", "1p": "avons écrit", "2p": "avez écrit", "3p": "ont écrit"},
+                "imparfait": {"1s": "écrivais", "2s": "écrivais", "3s": "écrivait", "1p": "écrivions", "2p": "écriviez", "3p": "écrivaient"},
+                "futur": {"1s": "écrirai", "2s": "écriras", "3s": "écrira", "1p": "écrirons", "2p": "écrirez", "3p": "écriront"},
+                "conditionnel": {"1s": "écrirais", "2s": "écrirais", "3s": "écrirait", "1p": "écririons", "2p": "écririez", "3p": "écriraient"},
+                "subjonctif": {"1s": "écrive", "2s": "écrives", "3s": "écrive", "1p": "écrivions", "2p": "écriviez", "3p": "écrivent"}
+            },
+            "boire": {
+                "present": {"1s": "bois", "2s": "bois", "3s": "boit", "1p": "buvons", "2p": "buvez", "3p": "boivent"},
+                "passe_compose": {"1s": "ai bu", "2s": "as bu", "3s": "a bu", "1p": "avons bu", "2p": "avez bu", "3p": "ont bu"},
+                "imparfait": {"1s": "buvais", "2s": "buvais", "3s": "buvait", "1p": "buvions", "2p": "buviez", "3p": "buvaient"},
+                "futur": {"1s": "boirai", "2s": "boiras", "3s": "boira", "1p": "boirons", "2p": "boirez", "3p": "boiront"},
+                "conditionnel": {"1s": "boirais", "2s": "boirais", "3s": "boirait", "1p": "boirions", "2p": "boiriez", "3p": "boiraient"},
+                "subjonctif": {"1s": "boive", "2s": "boives", "3s": "boive", "1p": "buvions", "2p": "buviez", "3p": "boivent"}
+            },
+            "connaître": {
+                "present": {"1s": "connais", "2s": "connais", "3s": "connaît", "1p": "connaissons", "2p": "connaissez", "3p": "connaissent"},
+                "passe_compose": {"1s": "ai connu", "2s": "as connu", "3s": "a connu", "1p": "avons connu", "2p": "avez connu", "3p": "ont connu"},
+                "imparfait": {"1s": "connaissais", "2s": "connaissais", "3s": "connaissait", "1p": "connaissions", "2p": "connaissiez", "3p": "connaissaient"},
+                "futur": {"1s": "connaîtrai", "2s": "connaîtras", "3s": "connaîtra", "1p": "connaîtrons", "2p": "connaîtrez", "3p": "connaîtront"},
+                "conditionnel": {"1s": "connaîtrais", "2s": "connaîtrais", "3s": "connaîtrait", "1p": "connaîtrions", "2p": "connaîtriez", "3p": "connaîtraient"},
+                "subjonctif": {"1s": "connaisse", "2s": "connaisses", "3s": "connaisse", "1p": "connaissions", "2p": "connaissiez", "3p": "connaissent"}
+            },
+            "vivre": {
+                "present": {"1s": "vis", "2s": "vis", "3s": "vit", "1p": "vivons", "2p": "vivez", "3p": "vivent"},
+                "passe_compose": {"1s": "ai vécu", "2s": "as vécu", "3s": "a vécu", "1p": "avons vécu", "2p": "avez vécu", "3p": "ont vécu"},
+                "imparfait": {"1s": "vivais", "2s": "vivais", "3s": "vivait", "1p": "vivions", "2p": "viviez", "3p": "vivaient"},
+                "futur": {"1s": "vivrai", "2s": "vivras", "3s": "vivra", "1p": "vivrons", "2p": "vivrez", "3p": "vivront"},
+                "conditionnel": {"1s": "vivrais", "2s": "vivrais", "3s": "vivrait", "1p": "vivrions", "2p": "vivriez", "3p": "vivraient"},
+                "subjonctif": {"1s": "vive", "2s": "vives", "3s": "vive", "1p": "vivions", "2p": "viviez", "3p": "vivent"}
+            },
+            "mourir": {
+                "present": {"1s": "meurs", "2s": "meurs", "3s": "meurt", "1p": "mourons", "2p": "mourez", "3p": "meurent"},
+                "passe_compose": {"1s": "suis mort", "2s": "es mort", "3s": "est mort", "1p": "sommes morts", "2p": "êtes morts", "3p": "sont morts"},
+                "imparfait": {"1s": "mourais", "2s": "mourais", "3s": "mourait", "1p": "mourions", "2p": "mouriez", "3p": "mouraient"},
+                "futur": {"1s": "mourrai", "2s": "mourras", "3s": "mourra", "1p": "mourrons", "2p": "mourrez", "3p": "mourront"},
+                "conditionnel": {"1s": "mourrais", "2s": "mourrais", "3s": "mourrait", "1p": "mourrions", "2p": "mourriez", "3p": "mourraient"},
+                "subjonctif": {"1s": "meure", "2s": "meures", "3s": "meure", "1p": "mourions", "2p": "mouriez", "3p": "meurent"}
+            }
+        };
+
+        // Mapper pour les noms de personnes
+        const personNames = {
+            "1s": "1ère personne du singulier",
+            "2s": "2ème personne du singulier", 
+            "3s": "3ème personne du singulier",
+            "1p": "1ère personne du pluriel",
+            "2p": "2ème personne du pluriel",
+            "3p": "3ème personne du pluriel"
+        };
+
+        // Mapper pour les noms de temps
+        const tenseNames = {
+            "present": "présent",
+            "passe_compose": "passé composé",
+            "imparfait": "imparfait",
+            "futur": "futur",
+            "conditionnel": "conditionnel présent",
+            "subjonctif": "subjonctif présent"
+        };
+
+        // Initialiser les sélecteurs de verbes
+        function initializeVerbSelectors() {
+            const verbSelect = document.getElementById('verbSelect');
+            Object.keys(verbLibrary).forEach(verb => {
+                const option = document.createElement('option');
+                option.value = verb;
+                option.textContent = verb;
+                verbSelect.appendChild(option);
+            });
+        }
+
+        // Gestion des thèmes
+        function changeTheme(theme) {
+            currentTheme = theme;
+            
+            // Retirer tous les thèmes existants
+            document.body.classList.remove('theme-classic', 'theme-white', 'theme-pink', 'theme-blue', 'theme-green');
+            
+            // Ajouter le nouveau thème
+            if (theme !== 'classic') {
+                document.body.classList.add(`theme-${theme}`);
+            }
+            
+            // Mettre à jour les boutons
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.theme === theme) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Regénérer la grille si elle existe déjà
+            if (gameData) {
+                const gameContainer = document.getElementById('gameContainer');
+                if (gameContainer && gameContainer.innerHTML.includes('crossword-grid')) {
+                    displayStudentGame(gameData);
+                }
+                
+                const teacherPreview = document.getElementById('teacherPreview');
+                if (teacherPreview && teacherPreview.innerHTML.includes('crossword-grid')) {
+                    displayTeacherPreview(gameData);
+                }
+            }
+        }
+        
+        // Initialisation des événements thèmes
+        function initializeThemeSelector() {
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    changeTheme(btn.dataset.theme);
+                });
+            });
+        }
+
+        // Appel d'initialisation au chargement
+        window.addEventListener('load', () => {
+            initializeVerbSelectors();
+            initializeThemeSelector();
+            // Appliquer le thème par défaut
+            changeTheme('pink');
+        });
+
+        // Basculer entre mode normal et mode verbe
+        function toggleInputMode() {
+            const inputType = document.querySelector('input[name="inputType"]:checked').value;
+            const normalInput = document.getElementById('normalInput');
+            const verbInput = document.getElementById('verbInput');
+            
+            if (inputType === 'verb') {
+                normalInput.style.display = 'none';
+                verbInput.style.display = 'flex';
+            } else {
+                normalInput.style.display = 'flex';
+                verbInput.style.display = 'none';
+            }
+        }
+
+        // Gestion du changement de mode
+        function switchMode(mode) {
+            // Mise à jour des boutons
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.mode-btn.${mode}`).classList.add('active');
+            
+            // Mise à jour des sections
+            document.querySelectorAll('.mode-section').forEach(section => section.classList.remove('active'));
+            document.querySelector(`.${mode}-section`).classList.add('active');
+        }
+
+        // Ajouter un verbe conjugué
+        function addVerb() {
+            const verbSelect = document.getElementById('verbSelect');
+            const personSelect = document.getElementById('personSelect');
+            const tenseSelect = document.getElementById('tenseSelect');
+            
+            const verb = verbSelect.value;
+            const person = personSelect.value;
+            const tense = tenseSelect.value;
+            
+            if (verb && person && tense) {
+                const conjugatedWord = verbLibrary[verb][tense][person];
+                const personName = personNames[person];
+                const tenseName = tenseNames[tense];
+                
+                // Créer l'indice automatiquement
+                const clue = `${verb} à la ${personName} du ${tenseName}`;
+                
+                // Ajouter le mot à la liste (on prend seulement le premier mot si composé)
+                const wordToAdd = conjugatedWord.split(' ')[0].toUpperCase();
+                
+                words.push({ word: wordToAdd, clue: clue });
+                
+                // Réinitialiser les sélecteurs
+                verbSelect.value = '';
+                personSelect.selectedIndex = 0;
+                tenseSelect.selectedIndex = 0;
+                
+                // Mettre à jour l'affichage
+                updateWordsList();
+            } else {
+                alert('Veuillez remplir tous les champs pour le verbe !');
+            }
+        }
+
+        // Ajouter un mot et son indice
+        function addWord() {
+            const wordInput = document.getElementById('wordInput');
+            const clueInput = document.getElementById('clueInput');
+            
+            const word = wordInput.value.trim().toUpperCase();
+            const clue = clueInput.value.trim();
+            
+            if (word && clue) {
+                // Vérifier que le mot ne contient que des lettres
+                if (!/^[A-ZÀ-ÿ]+$/i.test(word)) {
+                    alert('Le mot ne doit contenir que des lettres !');
+                    return;
+                }
+                
+                // Ajouter le mot à la liste
+                words.push({ word: word, clue: clue });
+                
+                // Vider les champs
+                wordInput.value = '';
+                clueInput.value = '';
+                
+                // Mettre à jour l'affichage
+                updateWordsList();
+            } else {
+                alert('Veuillez remplir le mot et son indice !');
+            }
+        }
+
+        // Mettre à jour la liste des mots
+        function updateWordsList() {
+            const wordsList = document.getElementById('wordsList');
+            const generateBtn = document.getElementById('generateBtn');
+            
+            if (words.length === 0) {
+                wordsList.innerHTML = '<p style="text-align: center; color: #666; font-style: italic;">Ajoutez des mots et leurs indices pour créer votre grille !</p>';
+                generateBtn.style.display = 'none';
+            } else {
+                wordsList.innerHTML = words.map((item, index) => `
+                    <div class="word-item">
+                        <div>
+                            <span class="word-text">${item.word}</span>
+                            <div class="clue-text">${item.clue}</div>
+                        </div>
+                        <button class="delete-word-btn" onclick="deleteWord(${index})">×</button>
+                    </div>
+                `).join('');
+                
+                generateBtn.style.display = words.length >= 3 ? 'block' : 'none';
+            }
+        }
+
+        // Supprimer un mot
+        function deleteWord(index) {
+            words.splice(index, 1);
+            updateWordsList();
+        }
+
+        // Algorithme amélioré de génération de grille
+        function generateCrossword() {
+            if (words.length < 3) {
+                alert('Veuillez ajouter au moins 3 mots pour créer une grille !');
+                return;
+            }
+
+            const grid = Array(gridSize).fill().map(() => Array(gridSize).fill(''));
+            const placedWords = [];
+            const wordsToPlace = [...words]; // Copie des mots à placer
+            
+            // Placer le premier mot au centre horizontalement
+            const firstWord = wordsToPlace.shift();
+            const startRow = Math.floor(gridSize / 2);
+            const startCol = Math.floor((gridSize - firstWord.word.length) / 2);
+            
+            for (let i = 0; i < firstWord.word.length; i++) {
+                grid[startRow][startCol + i] = firstWord.word[i];
+            }
+            
+            placedWords.push({
+                word: firstWord.word,
+                clue: firstWord.clue,
+                row: startRow,
+                col: startCol,
+                direction: 'horizontal',
+                number: 1
+            });
+
+            let wordNumber = 2;
+            let maxAttempts = wordsToPlace.length * 20; // Limite les tentatives
+            
+            // Continuer jusqu'à ce que tous les mots soient placés ou qu'on atteigne la limite
+            while (wordsToPlace.length > 0 && maxAttempts > 0) {
+                let wordPlaced = false;
+                
+                for (let wordIndex = 0; wordIndex < wordsToPlace.length; wordIndex++) {
+                    const wordToPlace = wordsToPlace[wordIndex];
+                    
+                    // Essayer de placer ce mot avec chaque mot déjà placé
+                    for (let placedWord of placedWords) {
+                        if (wordPlaced) break;
+                        
+                        // Chercher les intersections possibles
+                        for (let i = 0; i < wordToPlace.word.length; i++) {
+                            for (let j = 0; j < placedWord.word.length; j++) {
+                                if (wordToPlace.word[i] === placedWord.word[j]) {
+                                    // Calculer la position pour l'intersection
+                                    let newRow, newCol, newDirection;
+                                    
+                                    if (placedWord.direction === 'horizontal') {
+                                        newDirection = 'vertical';
+                                        newRow = placedWord.row - i;
+                                        newCol = placedWord.col + j;
+                                    } else {
+                                        newDirection = 'horizontal';
+                                        newRow = placedWord.row + j;
+                                        newCol = placedWord.col - i;
+                                    }
+                                    
+                                    // Vérifier si le placement est valide
+                                    if (canPlaceWord(grid, wordToPlace.word, newRow, newCol, newDirection)) {
+                                        // Placer le mot
+                                        placeWord(grid, wordToPlace.word, newRow, newCol, newDirection);
+                                        placedWords.push({
+                                            word: wordToPlace.word,
+                                            clue: wordToPlace.clue,
+                                            row: newRow,
+                                            col: newCol,
+                                            direction: newDirection,
+                                            number: wordNumber++
+                                        });
+                                        
+                                        // Retirer le mot de la liste des mots à placer
+                                        wordsToPlace.splice(wordIndex, 1);
+                                        wordPlaced = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (wordPlaced) break;
+                        }
+                        if (wordPlaced) break;
+                    }
+                    if (wordPlaced) break;
+                }
+                
+                if (!wordPlaced) {
+                    // Si aucun mot n'a pu être placé dans cette itération, on diminue les tentatives
+                    maxAttempts--;
+                }
+            }
+
+            // Afficher un message si certains mots n'ont pas pu être placés
+            if (wordsToPlace.length > 0) {
+                alert(`${wordsToPlace.length} mot(s) n'ont pas pu être placés dans la grille. Essayez avec des mots ayant plus de lettres communes.`);
+            }
+
+            // Sauvegarder les données du jeu
+            gameData = {
+                grid: grid,
+                words: placedWords,
+                gridSize: gridSize
+            };
+
+            // Afficher la prévisualisation
+            displayTeacherPreview(gameData);
+        }
+
+        // Vérifier si un mot peut être placé
+        function canPlaceWord(grid, word, row, col, direction) {
+            if (direction === 'horizontal') {
+                if (col < 0 || col + word.length > gridSize || row < 0 || row >= gridSize) return false;
+                for (let i = 0; i < word.length; i++) {
+                    if (grid[row][col + i] !== '' && grid[row][col + i] !== word[i]) return false;
+                }
+            } else {
+                if (row < 0 || row + word.length > gridSize || col < 0 || col >= gridSize) return false;
+                for (let i = 0; i < word.length; i++) {
+                    if (grid[row + i][col] !== '' && grid[row + i][col] !== word[i]) return false;
+                }
+            }
+            return true;
+        }
+
+        // Placer un mot dans la grille
+        function placeWord(grid, word, row, col, direction) {
+            if (direction === 'horizontal') {
+                for (let i = 0; i < word.length; i++) {
+                    grid[row][col + i] = word[i];
+                }
+            } else {
+                for (let i = 0; i < word.length; i++) {
+                    grid[row + i][col] = word[i];
+                }
+            }
+        }
+
+        // Afficher la prévisualisation pour le professeur
+        function displayTeacherPreview(data) {
+            const previewContainer = document.getElementById('teacherPreview');
+            previewContainer.innerHTML = `
+                <h3 style="text-align: center; color: #333; margin: 20px 0;">✨ Prévisualisation de la grille ✨</h3>
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <button class="generate-btn" onclick="switchToStudentMode()" style="background: linear-gradient(45deg, #4ecdc4, #44a08d);">
+                        🎮 Passer en mode jeu !
+                    </button>
+                </div>
+                <div class="crossword-container">
+                    ${createGridHTML(data, true)}
+                    ${createCluesHTML(data)}
+                </div>
+            `;
+        }
+
+        // Passer en mode étudiant avec la grille créée
+        function switchToStudentMode() {
+            if (!gameData) return;
+            
+            switchMode('student');
+            displayStudentGame(gameData);
+        }
+
+        // Afficher le jeu pour l'étudiant
+        function displayStudentGame(data) {
+            const gameContainer = document.getElementById('gameContainer');
+            totalWords = data.words.length;
+            completedWords = 0;
+            
+            gameContainer.innerHTML = `
+                <div class="grid-container">
+                    ${createGridHTML(data, false)}
+                </div>
+                ${createCluesHTML(data)}
+            `;
+            
+            updateProgress();
+        }
+
+        // Emojis par thème de couleur
+        const themeEmojis = {
+            classic: ['🐶', '🐱', '🐭', '🐰', '🐻', '🐼', '⭐', '🌟', '✨'],
+            white: ['☃️', '🐫', '🦆', '🐸', '☁️', '🥛', '⚪', '🥰', '🌕'],
+            pink: ['🌸', '🌷', '🌹', '🐷', '🦄', '🍑', '🍒', '💕', '🎀'],
+            blue: ['🐋', '🐬', '🐟', '🌊', '🦋', '🌫️', '💧', '❄️', '🌌'],
+            green: ['🐸', '🐊', '🌿', '🌱', '🌼', '🍏', '🥒', '🌳', '🌵']
+        };
+        
+        let currentTheme = 'pink'; // Thème par défaut
+
+        // Fonction pour obtenir un emoji aléatoire selon le thème (seulement 10% des cases)
+        function getRandomEmoji() {
+            // 90% de chance d'avoir une case vide, 10% d'avoir un emoji
+            if (Math.random() < 0.9) {
+                return ''; // Case vide
+            }
+            const emojis = themeEmojis[currentTheme] || themeEmojis.classic;
+            return emojis[Math.floor(Math.random() * emojis.length)];
+        }
+
+        // Créer le HTML de la grille avec emojis
+        function createGridHTML(data, isPreview) {
+            let gridHTML = `<div class="crossword-grid" style="grid-template-columns: repeat(${data.gridSize}, 1fr);">`;
+            
+            for (let row = 0; row < data.gridSize; row++) {
+                for (let col = 0; col < data.gridSize; col++) {
+                    const letter = data.grid[row][col];
+                    const cellId = `cell-${row}-${col}`;
+                    
+                    if (letter === '') {
+                        // Case vide (noir avec ou sans emoji)
+                        const emoji = getRandomEmoji();
+                        gridHTML += `<div class="cell blocked">${emoji}</div>`;
+                    } else {
+                        // Vérifier si c'est le début d'un mot
+                        const wordNumber = getWordNumber(data.words, row, col);
+                        const numberHTML = wordNumber ? `<span class="cell-number">${wordNumber}</span>` : '';
+                        
+                        if (isPreview) {
+                            gridHTML += `<div class="cell">${numberHTML}${letter}</div>`;
+                        } else {
+                            gridHTML += `<div class="cell" id="${cellId}">
+                                ${numberHTML}
+                                <input type="text" maxlength="1" onInput="checkLetter(${row}, ${col}, '${letter}')" 
+                                       onFocus="highlightWord(${row}, ${col})" style="text-transform: uppercase;">
+                            </div>`;
+                        }
+                    }
+                }
+            }
+            
+            gridHTML += '</div>';
+            return gridHTML;
+        }
+
+        // Obtenir le numéro du mot pour une cellule
+        function getWordNumber(words, row, col) {
+            for (let word of words) {
+                if (word.row === row && word.col === col) {
+                    return word.number;
+                }
+            }
+            return null;
+        }
+
+        // Créer le HTML des indices
+        function createCluesHTML(data) {
+            const horizontal = data.words.filter(w => w.direction === 'horizontal');
+            const vertical = data.words.filter(w => w.direction === 'vertical');
+            
+            return `
+                <div class="clues-container">
+                    <div class="clues-section">
+                        <h3>➡️ Horizontal</h3>
+                        ${horizontal.map(word => `
+                            <div class="clue-item" onclick="highlightWordByNumber(${word.number}, 'horizontal')">
+                                <span class="clue-number">${word.number}.</span>
+                                ${word.clue}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="clues-section">
+                        <h3>⬇️ Vertical</h3>
+                        ${vertical.map(word => `
+                            <div class="clue-item" onclick="highlightWordByNumber(${word.number}, 'vertical')">
+                                <span class="clue-number">${word.number}.</span>
+                                ${word.clue}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Vérifier une lettre saisie (AUCUNE validation visuelle)
+        function checkLetter(row, col, expectedLetter) {
+            const input = document.querySelector(`#cell-${row}-${col} input`);
+            const cell = document.getElementById(`cell-${row}-${col}`);
+            
+            // Aucune indication visuelle, on stocke juste la réponse
+            // La validation se fera seulement quand le mot entier sera saisi
+            
+            // Vérifier si le mot est complet
+            checkWordCompletion(row, col);
+        }
+
+        // Vérifier si un mot est complété (validation seulement si mot complet)
+        function checkWordCompletion(row, col) {
+            if (!gameData) return;
+            
+            for (let word of gameData.words) {
+                let wordCells = [];
+                let wordInputs = [];
+                let allFilled = true;
+                let allCorrect = true;
+                
+                // Collecter toutes les cellules du mot
+                for (let i = 0; i < word.word.length; i++) {
+                    let checkRow, checkCol;
+                    
+                    if (word.direction === 'horizontal') {
+                        checkRow = word.row;
+                        checkCol = word.col + i;
+                    } else {
+                        checkRow = word.row + i;
+                        checkCol = word.col;
+                    }
+                    
+                    const cell = document.getElementById(`cell-${checkRow}-${checkCol}`);
+                    const input = cell?.querySelector('input');
+                    
+                    wordCells.push(cell);
+                    wordInputs.push(input);
+                    
+                    // Vérifier si la case est remplie
+                    if (!input || input.value.trim() === '') {
+                        allFilled = false;
+                    }
+                    
+                    // Vérifier si la lettre est correcte
+                    if (!input || input.value.toUpperCase() !== word.word[i]) {
+                        allCorrect = false;
+                    }
+                }
+                
+                // Si le mot est complètement rempli
+                if (allFilled && !word.completed) {
+                    if (allCorrect) {
+                        // MOT CORRECT !
+                        word.completed = true;
+                        completedWords++;
+                        
+                        // Marquer toutes les cellules comme correctes
+                        wordCells.forEach((cell, index) => {
+                            cell.classList.add('correct');
+                            const input = cell.querySelector('input');
+                            if (input) input.disabled = true;
+                            
+                            // Animation en cascade
+                            setTimeout(() => {
+                                cell.classList.add('word-complete');
+                                createStars(cell);
+                            }, index * 100);
+                        });
+                        
+                        // Marquer l'indice comme complété
+                        const clueElement = document.querySelector(`.clue-item[onclick*="${word.number}"][onclick*="${word.direction}"]`);
+                        if (clueElement) {
+                            clueElement.classList.add('completed');
+                        }
+                        
+                        // Célébration
+                        setTimeout(() => createConfetti(), 300);
+                        updateProgress();
+                        
+                        // Vérifier si le jeu est terminé
+                        if (completedWords === totalWords) {
+                            setTimeout(() => showVictory(), 1500);
+                        }
+                        
+                    } else {
+                        // MOT INCORRECT - Effacer tout le mot
+                        wordInputs.forEach(input => {
+                            if (input && !input.disabled) {
+                                input.value = '';
+                            }
+                        });
+                        
+                        // Animation d'erreur pour tout le mot
+                        wordCells.forEach(cell => {
+                            cell.classList.add('error');
+                            setTimeout(() => cell.classList.remove('error'), 500);
+                        });
+                    }
+                }
+            }
+        }
+
+        // Mettre à jour la barre de progression
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            const percentage = Math.round((completedWords / totalWords) * 100);
+            
+            progressFill.style.width = percentage + '%';
+            progressText.textContent = `${percentage}% complété (${completedWords}/${totalWords} mots)`;
+        }
+
+        // Surligner un mot
+        function highlightWord(row, col) {
+            // Retirer les anciens surlignages
+            document.querySelectorAll('.cell.active').forEach(cell => cell.classList.remove('active'));
+            
+            if (!gameData) return;
+            
+            // Trouver le mot correspondant
+            for (let word of gameData.words) {
+                let isInWord = false;
+                
+                if (word.direction === 'horizontal') {
+                    if (word.row === row && col >= word.col && col < word.col + word.word.length) {
+                        isInWord = true;
+                        // Surligner tout le mot horizontal
+                        for (let i = 0; i < word.word.length; i++) {
+                            const cell = document.getElementById(`cell-${word.row}-${word.col + i}`);
+                            if (cell) cell.classList.add('active');
+                        }
+                    }
+                } else {
+                    if (word.col === col && row >= word.row && row < word.row + word.word.length) {
+                        isInWord = true;
+                        // Surligner tout le mot vertical
+                        for (let i = 0; i < word.word.length; i++) {
+                            const cell = document.getElementById(`cell-${word.row + i}-${word.col}`);
+                            if (cell) cell.classList.add('active');
+                        }
+                    }
+                }
+                
+                if (isInWord) break;
+            }
+        }
+
+        // Surligner un mot par son numéro
+        function highlightWordByNumber(number, direction) {
+            if (!gameData) return;
+            
+            const word = gameData.words.find(w => w.number === number && w.direction === direction);
+            if (!word) return;
+            
+            // Retirer les anciens surlignages
+            document.querySelectorAll('.cell.active').forEach(cell => cell.classList.remove('active'));
+            
+            // Surligner le mot
+            for (let i = 0; i < word.word.length; i++) {
+                let cellRow, cellCol;
+                
+                if (word.direction === 'horizontal') {
+                    cellRow = word.row;
+                    cellCol = word.col + i;
+                } else {
+                    cellRow = word.row + i;
+                    cellCol = word.col;
+                }
+                
+                const cell = document.getElementById(`cell-${cellRow}-${cellCol}`);
+                if (cell) {
+                    cell.classList.add('active');
+                    // Focuser sur la première cellule vide
+                    const input = cell.querySelector('input');
+                    if (input && !input.disabled && i === 0) {
+                        input.focus();
+                    }
+                }
+            }
+        }
+
+
+        // Remettre à zéro le jeu
+        function resetGame() {
+            if (!gameData) return;
+            
+            // Réinitialiser les données
+            completedWords = 0;
+            gameData.words.forEach(word => word.completed = false);
+            
+            // Réinitialiser les cellules
+            document.querySelectorAll('.cell input').forEach(input => {
+                input.value = '';
+                input.disabled = false;
+            });
+            
+            document.querySelectorAll('.cell').forEach(cell => {
+                cell.classList.remove('correct', 'active');
+            });
+            
+            // Réinitialiser les indices
+            document.querySelectorAll('.clue-item').forEach(clue => {
+                clue.classList.remove('completed');
+            });
+            
+            updateProgress();
+        }
+
+        // Créer des étoiles animées
+        function createStars(element) {
+            const rect = element.getBoundingClientRect();
+            
+            for (let i = 0; i < 3; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.innerHTML = '⭐';
+                star.style.left = (rect.left + Math.random() * rect.width) + 'px';
+                star.style.top = (rect.top + Math.random() * rect.height) + 'px';
+                
+                document.body.appendChild(star);
+                
+                setTimeout(() => star.remove(), 2000);
+            }
+        }
+
+        // Créer des confettis
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                
+                document.getElementById('celebration').appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
+
+        // Afficher le message de victoire
+        function showVictory() {
+            const victoryMessage = document.getElementById('victoryMessage');
+            victoryMessage.style.display = 'block';
+            
+            // Créer plus d'effets de célébration
+            createConfetti();
+            createConfetti();
+            
+            // Cacher le message après 5 secondes
+            setTimeout(() => {
+                victoryMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        // Gestion des touches du clavier
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const activeElement = document.activeElement;
+                
+                // Si on est dans le mode professeur
+                if (activeElement.id === 'wordInput' || activeElement.id === 'clueInput') {
+                    addWord();
+                }
+            }
+        });
+
+    </script>
+</body>
 </html>
