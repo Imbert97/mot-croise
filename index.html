@@ -1135,17 +1135,6 @@ document.getElementById("modal").addEventListener("click", e => {
 });
 
 
-function loadData() {
-    try {
-        const raw = localStorage.getItem('finance_mattias_v1');
-        if (!raw) return false;
-        const d = JSON.parse(raw);
-        if (Array.isArray(d.investments)) investments = d.investments;
-        if (d.budOv && typeof d.budOv === 'object') Object.assign(budOv, d.budOv);
-        if (typeof d.epargneInitiale === 'number') epargneInitiale = d.epargneInitiale;
-        return true;
-    } catch(e) { console.warn('Chargement échoué:', e); return false; }
-}
 // ══════════════════════════════════════════════════════
 // BUDGET
 // ══════════════════════════════════════════════════════
