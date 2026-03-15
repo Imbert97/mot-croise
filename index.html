@@ -1135,22 +1135,6 @@ document.getElementById("modal").addEventListener("click", e => {
 });
 
 
-// ══════════════════════════════════════════════════════
-// PERSISTANCE — localStorage
-// ══════════════════════════════════════════════════════
-function saveData() {
-    try {
-        localStorage.setItem('finance_mattias_v1', JSON.stringify({
-            investments,
-            budOv,
-            epargneInitiale,
-            savedAt: Date.now()
-        }));
-        const ind = document.getElementById('save-indicator');
-        if (ind) { ind.style.opacity='1'; setTimeout(()=>ind.style.opacity='0', 1800); }
-    } catch(e) { console.warn('Sauvegarde échouée:', e); }
-}
-
 function loadData() {
     try {
         const raw = localStorage.getItem('finance_mattias_v1');
@@ -1305,7 +1289,6 @@ function setBudOv(y, m, section, key, val) {
             document.getElementById("b-epargne-total").textContent=fCAD(base);
         }
     }
-    saveData();
     renderBudgetChart();
     scheduleSave();
 }
@@ -1478,10 +1461,9 @@ window.setEpargneInit   = setEpargneInit;
 // ══════════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════════
-loadData();          // charger depuis localStorage
-loadData();
-renderBudget();      // initialiser la page budget
-if (investments.length > 0) fetchAllPrices();  // rafraîchir les prix au démarrage
+loadData(); // charge depuis Firebase Firestore
+renderBudget(); // initialiser la page budget
+
 </script>
 </body>
 </html>
