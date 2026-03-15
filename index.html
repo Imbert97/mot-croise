@@ -108,10 +108,11 @@
                     justify-content:center;font-size:10px;font-weight:800;color:white;flex-shrink:0}
         .asset-name{font-weight:700;font-size:13px}
         .asset-sub{font-size:11px;color:var(--t3);margin-top:1px}
-        .btn-del{width:28px;height:28px;border-radius:7px;border:none;background:transparent;
+        .btn-del,.btn-icon{width:28px;height:28px;border-radius:7px;border:none;background:transparent;
                  color:var(--t3);cursor:pointer;font-size:13px;display:inline-flex;
                  align-items:center;justify-content:center;transition:all .18s}
         .btn-del:hover{background:var(--rbg);color:var(--red)}
+        .btn-icon:hover{background:var(--gbg);color:var(--green)}
         .tag-loading{font-size:11px;color:var(--t3);font-style:italic}
 
         .bottom-bar{position:fixed;bottom:0;left:0;right:0;background:var(--card);
@@ -155,6 +156,93 @@
         .coming-icon{font-size:64px;opacity:.18}
         .coming h2{font-size:23px;font-weight:800;color:var(--t2)}
         .coming p{color:var(--t3);font-size:14px}
+
+        /* ══ BUDGET ══ */
+        .bud-nav-row{display:flex;align-items:center;justify-content:center;gap:24px;margin-bottom:20px}
+        .bud-nav-btn{width:42px;height:42px;border-radius:12px;border:1px solid var(--border);
+                     background:var(--card);color:var(--t2);cursor:pointer;font-size:22px;
+                     display:flex;align-items:center;justify-content:center;
+                     transition:all .18s;box-shadow:var(--sh);font-family:'Inter',sans-serif}
+        .bud-nav-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+        .bud-nav-btn:disabled{opacity:.3;cursor:not-allowed}
+        .bud-nav-btn:hover:disabled{background:var(--bg);color:var(--t3);border-color:var(--border)}
+        .bud-month-wrap{text-align:center;min-width:200px}
+        .bud-month-lbl{font-size:28px;font-weight:900;letter-spacing:-.8px}
+        .bud-month-sub{font-size:12px;color:var(--t3);font-weight:500;margin-top:3px}
+        .bud-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+        .bud-card{background:var(--card);border:1px solid var(--border);border-radius:16px;
+                  padding:18px 20px;box-shadow:var(--sh)}
+        .bud-card-lbl{font-size:10.5px;font-weight:700;color:var(--t3);text-transform:uppercase;
+                      letter-spacing:.8px;margin-bottom:7px}
+        .bud-card-val{font-size:22px;font-weight:800;letter-spacing:-.5px}
+        .bud-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+        .bud-sec{background:var(--card);border:1px solid var(--border);border-radius:20px;
+                 padding:22px 24px;box-shadow:var(--sh)}
+        .bud-sec-head{display:flex;align-items:center;gap:10px;padding-bottom:14px;
+                      border-bottom:2px solid var(--border);margin-bottom:4px}
+        .bud-sec-icon{font-size:19px}
+        .bud-sec-title{font-size:15px;font-weight:800;flex:1}
+        .bud-sec-total{font-size:17px;font-weight:800}
+        /* Lignes simples (carte épargne) */
+        .bud-row{display:flex;align-items:center;gap:10px;padding:10px 0;
+                 border-bottom:1px solid var(--bg2)}
+        .bud-row:last-child{border-bottom:none}
+        .bud-row-icon{font-size:15px;width:22px;text-align:center;flex-shrink:0}
+        .bud-row-label{flex:1;font-size:13px;font-weight:600;color:var(--t2)}
+        .bud-row-input{width:120px;padding:6px 10px;background:var(--bg);
+                       border:1.5px solid transparent;border-radius:8px;
+                       color:var(--t1);font-size:13px;font-weight:700;
+                       font-family:'Inter',sans-serif;text-align:right;transition:all .18s}
+        .bud-row-input:hover{border-color:var(--border)}
+        .bud-row-input:focus{outline:none;border-color:var(--accent);background:var(--card);
+                             box-shadow:0 0 0 3px rgba(81,71,232,.08)}
+        .bud-row-input.modified{border-color:var(--accent);background:rgba(81,71,232,.04)}
+        /* Lignes données (prévu | réel | écart) */
+        .bud-col-heads{display:grid;grid-template-columns:24px 1fr 100px 100px 68px;
+                       gap:6px;padding:7px 0 9px;border-bottom:2px solid var(--border);margin-bottom:2px}
+        .bud-ch{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;
+                letter-spacing:.7px;text-align:right}
+        .bud-ch:nth-child(2){text-align:left}
+        .bud-drow{display:grid;grid-template-columns:24px 1fr 100px 100px 68px;
+                  align-items:center;gap:6px;padding:9px 0;border-bottom:1px solid var(--bg2)}
+        .bud-drow:last-child{border-bottom:none}
+        .bud-dinp{width:100%;padding:6px 8px;background:var(--bg);border:1.5px solid transparent;
+                  border-radius:8px;color:var(--t1);font-size:12.5px;font-weight:700;
+                  font-family:'Inter',sans-serif;text-align:right;transition:all .18s}
+        .bud-dinp:hover{border-color:var(--border)}
+        .bud-dinp:focus{outline:none;border-color:var(--accent);background:var(--card);
+                        box-shadow:0 0 0 3px rgba(81,71,232,.08)}
+        .bud-dinp.mod{border-color:var(--accent);background:rgba(81,71,232,.03)}
+        .bud-dinp.reel{background:rgba(255,255,255,.9);border:1.5px solid var(--border)}
+        .bud-dinp.reel:focus{border-color:var(--accent)}
+        .bud-dinp.reel.has-val{border-color:var(--t3)}
+        .bud-ecart{font-size:11px;font-weight:700;text-align:right;padding:3px 5px;
+                   border-radius:6px;white-space:nowrap}
+        .ec-good{color:var(--green);background:var(--gbg)}
+        .ec-bad{color:var(--red);background:var(--rbg)}
+        .ec-nil{color:var(--t3)}
+        .bud-tot-row{display:grid;grid-template-columns:24px 1fr 100px 100px 68px;
+                     align-items:center;gap:6px;padding:10px 0 0;margin-top:4px;
+                     border-top:2px solid var(--border)}
+        .bud-tot-lbl{font-size:12px;font-weight:800;color:var(--t1);grid-column:1/3}
+        .bud-tot-val{font-size:13px;font-weight:800;text-align:right}
+        .bud-sec-meta{font-size:11px;font-weight:600;margin-top:3px}
+        .bud-chart-card{background:var(--card);border:1px solid var(--border);
+                        border-radius:20px;padding:24px 26px;box-shadow:var(--sh)}
+        .bud-month-indicator{display:flex;gap:3px;align-items:center;justify-content:center;
+                             margin-bottom:20px;flex-wrap:wrap}
+        .bud-dot{width:8px;height:8px;border-radius:50%;background:var(--border);
+                 cursor:pointer;transition:all .18s}
+        .bud-dot.active{background:var(--accent);transform:scale(1.4)}
+        .bud-dot.past{background:var(--t3)}
+
+        .sync-pill{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;
+                   color:var(--t2);padding:6px 12px;border-radius:8px;
+                   border:1px solid var(--border);background:var(--bg)}
+        .sdot{width:7px;height:7px;border-radius:50%;background:var(--t3);flex-shrink:0;transition:background .3s}
+        .sdot.syncing{background:var(--accent);animation:pulse 1s infinite}
+        .sdot.ok{background:var(--green);box-shadow:0 0 0 2px var(--gbg)}
+        .sdot.err{background:var(--red)}
         .tg2{color:var(--green)} .tr3{color:var(--red)}
         ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}
         ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
@@ -173,7 +261,12 @@
             <div class="pdot" id="pdot"></div>
             <span id="pstatus">Actualiser les prix</span>
         </button>
+        <div class="sync-pill">
+            <div class="sdot" id="sdot"></div>
+            <span id="slbl">Firebase</span>
+        </div>
         <div class="nav-date" id="nav-date"></div>
+        <div id="save-indicator" style="font-size:11.5px;font-weight:700;color:var(--green);opacity:0;transition:opacity .4s;display:flex;align-items:center;gap:5px"><span style="font-size:9px">●</span>Sauvegardé</div>
     </div>
 </nav>
 
@@ -249,6 +342,7 @@
                 <th class="tr">Prix achat</th>
                 <th class="tr">Valeur achat</th>
                 <th class="tr">Prix actuel</th>
+                <th class="tr">Valeur actuelle</th>
                 <th class="tr">Gain / Perte</th>
                 <th class="tr">Rendement</th>
                 <th></th>
@@ -260,10 +354,91 @@
 
 <!-- BUDGET -->
 <div class="page" id="page-budget">
-    <div class="coming">
-        <div class="coming-icon">💳</div>
-        <h2>Page Budget</h2>
-        <p>Cette section sera développée dans la prochaine étape.</p>
+    <div class="bud-nav-row">
+        <button class="bud-nav-btn" id="bud-prev" onclick="budPrev()">‹</button>
+        <div class="bud-month-wrap">
+            <div class="bud-month-lbl" id="bud-month-lbl">—</div>
+            <div class="bud-month-sub" id="bud-month-sub">—</div>
+        </div>
+        <button class="bud-nav-btn" id="bud-next" onclick="budNext()">›</button>
+    </div>
+
+    <div class="bud-cards">
+        <div class="bud-card">
+            <div class="bud-card-lbl">Revenus</div>
+            <div class="bud-card-val tg2" id="bc-rev">—</div>
+        </div>
+        <div class="bud-card">
+            <div class="bud-card-lbl">Dépenses</div>
+            <div class="bud-card-val tr3" id="bc-dep">—</div>
+        </div>
+        <div class="bud-card">
+            <div class="bud-card-lbl">Solde mensuel</div>
+            <div class="bud-card-val" id="bc-sol">—</div>
+        </div>
+        <div class="bud-card">
+            <div class="bud-card-lbl">Épargne cumulée</div>
+            <div class="bud-card-val" id="bc-cum">—</div>
+        </div>
+    </div>
+
+    <div class="bud-grid">
+        <div class="bud-sec">
+            <div class="bud-sec-head">
+                <div class="bud-sec-icon">💰</div>
+                <div class="bud-sec-title">Revenus</div>
+                <div><div class="bud-sec-total tg2" id="bs-rev-total">—</div><div class="bud-sec-meta" id="bs-rev-meta" style="color:var(--t3)"></div></div>
+            </div>
+            <div id="rev-rows"></div>
+        </div>
+        <div class="bud-sec">
+            <div class="bud-sec-head">
+                <div class="bud-sec-icon">💸</div>
+                <div class="bud-sec-title">Dépenses</div>
+                <div><div class="bud-sec-total tr3" id="bs-dep-total">—</div><div class="bud-sec-meta" id="bs-dep-meta" style="color:var(--t3)"></div></div>
+            </div>
+            <div id="dep-rows"></div>
+        </div>
+    </div>
+
+    <!-- Épargne initiale — uniquement Mars 2026 -->
+    <div id="epargne-init-card" style="display:none;margin-bottom:16px" class="bud-sec">
+        <div class="bud-sec-head">
+            <div class="bud-sec-icon">🏦</div>
+            <div class="bud-sec-title">Point de départ — Mars 2026</div>
+        </div>
+        <div class="bud-row">
+            <span class="bud-row-icon">💵</span>
+            <span class="bud-row-label">Épargne initiale</span>
+            <input class="bud-row-input" type="number" id="inp-epargne-init"
+                   value="6000" step="100" min="0" onfocus="this.select()"
+                   onchange="setEpargneInit(this.value)">
+        </div>
+        <div class="bud-row">
+            <span class="bud-row-icon">📈</span>
+            <span class="bud-row-label">Somme placée (portefeuille)</span>
+            <span class="fw7" id="b-somme-placee" style="font-size:13px">—</span>
+        </div>
+        <div class="bud-row" style="border-bottom:none;margin-top:4px;background:var(--bg2);
+             border-radius:10px;padding:11px 10px">
+            <span class="bud-row-icon">✅</span>
+            <span class="bud-row-label" style="font-weight:800;color:var(--t1)">
+                Épargne de départ totale
+            </span>
+            <span class="fw8" id="b-epargne-total" style="font-size:15px;color:var(--accent)">—</span>
+        </div>
+    </div>
+
+    <div class="bud-chart-card">
+        <div class="sec-head" style="margin-bottom:16px">
+            <div class="sec-title">Vue d'ensemble · Mars 2026 — Avril 2028</div>
+            <div style="font-size:12px;color:var(--t3);font-weight:500">
+                <span style="display:inline-block;width:10px;height:10px;background:#00b48a;border-radius:2px;margin-right:4px"></span>Solde positif
+                <span style="display:inline-block;width:10px;height:10px;background:#e5404a;border-radius:2px;margin:0 4px 0 12px"></span>Solde négatif
+                <span style="display:inline-block;width:18px;height:2.5px;background:#5147e8;vertical-align:middle;margin:0 4px 0 12px;border-radius:2px"></span>Épargne cumulée
+            </div>
+        </div>
+        <div style="height:230px"><canvas id="budgetChart"></canvas></div>
     </div>
 </div>
 
@@ -312,7 +487,86 @@
     </div>
 </div>
 
-<script>
+<script type="module">
+// ══════════════════════════════════════════════════════
+// FIREBASE (modular SDK — même approche que Mes Courses)
+// ══════════════════════════════════════════════════════
+import { initializeApp }       from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc }
+                                from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey:            "AIzaSyAxjWPE0L7bAW5D4hm5_h7B_oTwdLUNVOk",
+    authDomain:        "fianance-6cac8.firebaseapp.com",
+    projectId:         "fianance-6cac8",
+    storageBucket:     "fianance-6cac8.firebasestorage.app",
+    messagingSenderId: "473315813682",
+    appId:             "1:473315813682:web:80070a6b7f744a61254f2b"
+};
+const fbApp = initializeApp(firebaseConfig);
+const db    = getFirestore(fbApp);
+
+function setSync(state, msg) {
+    const d = document.getElementById("sdot");
+    const l = document.getElementById("slbl");
+    if (!d) return;
+    d.className = "sdot" + (state==="syncing"?" syncing":state==="ok"?" ok":state==="err"?" err":"");
+    l.textContent = msg || (state==="syncing"?"Enregistrement…":state==="ok"?"Synchronisé":"Hors ligne");
+}
+
+let saveTimer = null;
+function scheduleSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveData, 1800);
+    setSync("syncing");
+}
+
+async function saveData() {
+    try {
+        await setDoc(doc(db, "finance", "portfolio"), {
+            investments: investments.map(i=>({...i})),
+            epargneInitiale,
+            updatedAt: new Date().toISOString()
+        });
+        await setDoc(doc(db, "finance", "budget"), {
+            overrides: JSON.parse(JSON.stringify(budOv)),
+            updatedAt: new Date().toISOString()
+        });
+        setSync("ok");
+    } catch(e) {
+        console.error("Save error:", e);
+        setSync("err", "Erreur sync");
+    }
+}
+
+async function loadData() {
+    setSync("syncing", "Chargement…");
+    try {
+        const [pSnap, bSnap] = await Promise.all([
+            getDoc(doc(db, "finance", "portfolio")),
+            getDoc(doc(db, "finance", "budget"))
+        ]);
+        if (pSnap.exists()) {
+            const d = pSnap.data();
+            investments      = d.investments      || [];
+            epargneInitiale  = d.epargneInitiale  ?? 6000;
+        }
+        if (bSnap.exists()) {
+            const d = bSnap.data();
+            if (d.overrides) Object.assign(budOv, d.overrides);
+        }
+        setSync("ok");
+        renderAll();
+        loadChartData(currentPeriod);
+        if (investments.length) refreshAll();
+    } catch(e) {
+        console.error("Load error:", e);
+        setSync("err", "Hors ligne");
+        renderAll();
+        loadChartData(currentPeriod);
+    }
+}
+
 // ══════════════════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════════════════
@@ -351,17 +605,25 @@ const totalGain  = () => {
 // ══════════════════════════════════════════════════════
 const PROXIES = [
     u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
-    u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`
+    u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+    u => `https://thingproxy.freeboard.io/fetch/${u}`,
+    u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`
+];
+const YF_BASES = [
+    "https://query1.finance.yahoo.com",
+    "https://query2.finance.yahoo.com"
 ];
 
 async function yFetch(path) {
-    const base = "https://query1.finance.yahoo.com";
-    for (const mkP of PROXIES) {
-        try {
-            const r = await fetch(mkP(base+path), {signal: AbortSignal.timeout(7000)});
-            if (!r.ok) continue;
-            return await r.json();
-        } catch { continue; }
+    for (const base of YF_BASES) {
+        for (const mkP of PROXIES) {
+            try {
+                const r = await fetch(mkP(base+path), {signal: AbortSignal.timeout(9000)});
+                if (!r.ok) continue;
+                const json = await r.json();
+                if (json?.chart?.result?.[0]) return json;  // valider la réponse
+            } catch { continue; }
+        }
     }
     return null;
 }
@@ -387,7 +649,30 @@ async function refreshAll() {
             ok = true;
         }
     }
+    if (!ok) {
+        // Essai v7 quote endpoint comme dernier recours
+        for (const inv of investments) {
+            for (const base of YF_BASES) {
+                for (const mkP of PROXIES) {
+                    try {
+                        const r = await fetch(mkP(`${base}/v7/finance/quote?symbols=${inv.ticker}&fields=regularMarketPrice`),
+                            {signal: AbortSignal.timeout(6000)});
+                        if (!r.ok) continue;
+                        const json = await r.json();
+                        const price = json?.quoteResponse?.result?.[0]?.regularMarketPrice;
+                        if (price) {
+                            inv.currentPrice = price; inv.priceLoaded = true; ok = true;
+                            inv.name = json?.quoteResponse?.result?.[0]?.longName || inv.displayTicker;
+                        }
+                    } catch { continue; }
+                    if (inv.priceLoaded) break;
+                }
+                if (inv.priceLoaded) break;
+            }
+        }
+    }
     setDot(ok ? "live" : "err");
+    saveData();
     renderAll();
     await loadChartData(currentPeriod);
 }
@@ -473,8 +758,10 @@ async function loadChartData(period) {
     }
 
     if (!fetchOk || !Object.keys(portfolioByTs).length) {
-        showChartState("error","Données non disponibles",
-            "Impossible de joindre Yahoo Finance.<br>Clique sur « Actualiser les prix » pour réessayer.");
+        showChartState("error","Données de graphique indisponibles",
+            "Les proxies CORS ne répondent pas en ce moment.<br>" +
+            "Utilise ✏️ pour saisir les prix manuellement — les totaux se calculeront.<br>" +
+            "Le graphique se chargera automatiquement au prochain essai.");
         return;
     }
 
@@ -648,7 +935,7 @@ function renderTable() {
     tb.innerHTML = "";
 
     if (!investments.length) {
-        tb.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px 0;color:var(--t3)">
+        tb.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:40px 0;color:var(--t3)">
             <div style="font-size:30px;margin-bottom:10px;opacity:.25">📋</div>
             <div style="font-size:14px;font-weight:700;color:var(--t2);margin-bottom:6px">Aucun investissement</div>
             <div style="font-size:12.5px">Clique sur <strong>＋ Ajouter</strong> pour commencer.</div>
@@ -665,7 +952,7 @@ function renderTable() {
             lastMonth = mo;
             const mr = document.createElement("tr");
             mr.className = "month-hdr";
-            mr.innerHTML = `<td colspan="8">📅 ${mo}</td>`;
+            mr.innerHTML = `<td colspan="9">📅 ${mo}</td>`;
             tb.appendChild(mr);
         }
 
@@ -702,9 +989,13 @@ function renderTable() {
             <td class="tr">${fCAD(inv.buyPrice)}</td>
             <td class="tr fw7">${fCAD(valAchat)}</td>
             <td class="tr">${prixActuelTxt}</td>
+            <td class="tr fw7">${inv.priceLoaded ? fCAD(inv.shares * inv.currentPrice) : '<span style="color:var(--t3)">—</span>'}</td>
             <td class="tr">${gainTxt}</td>
             <td class="tr">${rendTxt}</td>
-            <td class="tr"><button class="btn-del" onclick="delHolding(${inv.id})">🗑</button></td>`;
+            <td class="tr" style="white-space:nowrap">
+                <button class="btn-icon" onclick="manualPrice(${inv.id})" title="Saisir prix manuellement">✏️</button>
+                <button class="btn-del" onclick="delHolding(${inv.id})" title="Supprimer">🗑</button>
+            </td>`;
         tb.appendChild(tr);
     });
 }
@@ -775,6 +1066,7 @@ function switchPage(p, btn) {
     document.getElementById("page-"+p).classList.add("active");
     btn.classList.add("active");
     document.getElementById("bottom-bar").style.display = p==="placements"?"":"none";
+    if(p==="budget") renderBudget();
 }
 
 function openModal()  { document.getElementById("modal").classList.add("on"); }
@@ -811,14 +1103,28 @@ function addHolding() {
     });
 
     closeModal();
+    saveData();
     renderAll();
-    // Charger les prix + le graphique en arrière-plan
     refreshAll().then(() => loadChartData(currentPeriod));
+}
+
+function manualPrice(id) {
+    const inv = investments.find(i => i.id === id);
+    if (!inv) return;
+    const input = prompt(`Prix actuel pour ${inv.displayTicker} (CAD) :`);
+    if (input === null) return;
+    const price = parseFloat(input.replace(",","."));
+    if (isNaN(price) || price <= 0) { alert("Prix invalide."); return; }
+    inv.currentPrice = price;
+    inv.priceLoaded  = true;
+    renderAll();
+    if (chartData.values.length) drawChart();
 }
 
 function delHolding(id) {
     if (confirm("Supprimer cet investissement ?")) {
         investments = investments.filter(i => i.id !== id);
+        saveData();
         renderAll();
         loadChartData(currentPeriod);
     }
@@ -828,11 +1134,354 @@ document.getElementById("modal").addEventListener("click", e => {
     if (e.target === document.getElementById("modal")) closeModal();
 });
 
+
+// ══════════════════════════════════════════════════════
+// PERSISTANCE — localStorage
+// ══════════════════════════════════════════════════════
+function saveData() {
+    try {
+        localStorage.setItem('finance_mattias_v1', JSON.stringify({
+            investments,
+            budOv,
+            epargneInitiale,
+            savedAt: Date.now()
+        }));
+        const ind = document.getElementById('save-indicator');
+        if (ind) { ind.style.opacity='1'; setTimeout(()=>ind.style.opacity='0', 1800); }
+    } catch(e) { console.warn('Sauvegarde échouée:', e); }
+}
+
+function loadData() {
+    try {
+        const raw = localStorage.getItem('finance_mattias_v1');
+        if (!raw) return false;
+        const d = JSON.parse(raw);
+        if (Array.isArray(d.investments)) investments = d.investments;
+        if (d.budOv && typeof d.budOv === 'object') Object.assign(budOv, d.budOv);
+        if (typeof d.epargneInitiale === 'number') epargneInitiale = d.epargneInitiale;
+        return true;
+    } catch(e) { console.warn('Chargement échoué:', e); return false; }
+}
+// ══════════════════════════════════════════════════════
+// BUDGET
+// ══════════════════════════════════════════════════════
+const BM = ["jan","fév","mar","avr","mai","jun","jul","aoû","sep","oct","nov","déc"];
+const BML = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+
+function genBudMonths() {
+    const arr = []; let y=2026, m=2;
+    while (y<2028 || (y===2028 && m<=3)) { arr.push({year:y,month:m}); if(++m>11){m=0;y++;} }
+    return arr;
+}
+const ALL_BM = genBudMonths(); // 26 months
+let budIdx = 0;
+const budOv = {};
+let budChart = null;
+let epargneInitiale = 6000;
+
+function setEpargneInit(val) {
+    epargneInitiale = parseFloat(val) || 0;
+    saveData();
+    renderBudget();
+}
+
+function sommePlacee() {
+    // Valeur actuelle du portefeuille (prix chargés si dispo, sinon prix achat)
+    return investments.reduce((s,i) => s + i.shares * (i.priceLoaded ? i.currentPrice : i.buyPrice), 0);
+}
+
+function baseEpargne() {
+    return epargneInitiale + sommePlacee();
+}
+
+const budREV_ITEMS = [
+    {key:"maman",   label:"Maman",   icon:"👩"},
+    {key:"travail", label:"Travail", icon:"💼"},
+    {key:"bourse",  label:"Bourse",  icon:"🎓"},
+    {key:"cadeau",  label:"Cadeau",  icon:"🎁"}
+];
+const budDEP_ITEMS = [
+    {key:"courses",     label:"Courses",     icon:"🛒"},
+    {key:"loyer",       label:"Loyer",       icon:"🏠"},
+    {key:"scolarite",   label:"Scolarité",   icon:"📚"},
+    {key:"abonnements", label:"Abonnements", icon:"📱"},
+    {key:"plaisir",     label:"Plaisir",     icon:"🎮"},
+    {key:"exception",   label:"Exception",   icon:"⚠️"}
+];
+
+function budScol(y, m) {
+    if(y===2026&&m===5) return 973;
+    if(y===2026&&m===8) return 3490;
+    if(y===2027&&m===0) return 1200;
+    if(y===2027&&m===4) return 1200;
+    if(y===2027&&m===8) return 1200;
+    if(y===2028&&m===0) return 1200;
+    return 0;
+}
+
+function budDef(y, m) {
+    return {
+        revenus:  { maman:1025, travail:(y===2026&&m>=4&&m<=7)?2000:875, bourse:0, cadeau:0 },
+        depenses: { courses:400, loyer:1115, scolarite:budScol(y,m), abonnements:30, plaisir:380, exception:0 }
+    };
+}
+
+function mKey(y, m) { return `${y}-${String(m+1).padStart(2,"0")}`; }
+
+function getBM(y, m) {
+    const k=mKey(y,m), def=budDef(y,m), ov=budOv[k]||{};
+    return {
+        revenus:       {...def.revenus,  ...(ov.revenus||{})},
+        depenses:      {...def.depenses, ...(ov.depenses||{})},
+        revenus_reel:  {...(ov.revenus_reel||{})},
+        depenses_reel: {...(ov.depenses_reel||{})}
+    };
+}
+
+function sumReel(data, section) {
+    const r = data[section+'_reel'];
+    return Object.values(r).reduce((s,v)=>s+(parseFloat(v)||0),0);
+}
+
+function hasReel(data, section) {
+    return Object.values(data[section+'_reel']).some(v=>parseFloat(v)>0);
+}
+
+function setBudReel(y, m, section, key, val) {
+    const k=mKey(y,m);
+    if(!budOv[k]) budOv[k]={};
+    const rk=section+'_reel';
+    if(!budOv[k][rk]) budOv[k][rk]={};
+    budOv[k][rk][key]=parseFloat(val)||0;
+    saveData();
+    renderBudget();
+}
+
+function ecartClass(pct, isRev) {
+    if(pct===null) return 'ec-nil';
+    if(isRev) return pct>=0?'ec-good':'ec-bad';
+    return pct<=0?'ec-good':'ec-bad';
+}
+function ecartTxt(pct) {
+    if(pct===null) return '—';
+    return (pct>=0?'+':'')+pct.toFixed(1)+'%';
+}
+
+function sumO(o) { return Object.values(o).reduce((s,v)=>s+(parseFloat(v)||0),0); }
+
+function cumul(upTo) {
+    let c = baseEpargne(); // commence depuis épargne initiale + portefeuille
+    for(let i=0;i<=upTo;i++){
+        const{year,month}=ALL_BM[i];
+        const d=getBM(year,month);
+        c+=sumO(d.revenus)-sumO(d.depenses);
+    }
+    return c;
+}
+
+function budPrev() { if(budIdx>0){budIdx--;renderBudget();} }
+function budNext() { if(budIdx<ALL_BM.length-1){budIdx++;renderBudget();} }
+
+function setBudOv(y, m, section, key, val) {
+    const k=mKey(y,m);
+    if(!budOv[k]) budOv[k]={};
+    if(!budOv[k][section]) budOv[k][section]={};
+    budOv[k][section][key]=parseFloat(val)||0;
+    const {year,month}=ALL_BM[budIdx];
+    if(y===year&&m===month){
+        // update totals + chart without re-rendering all inputs
+        const data=getBM(year,month);
+        const rT=sumO(data.revenus), dT=sumO(data.depenses), sol=rT-dT, cum=cumul(budIdx);
+        document.getElementById("bc-rev").textContent=fCAD(rT);
+        document.getElementById("bc-dep").textContent=fCAD(dT);
+        const se=document.getElementById("bc-sol"); se.textContent=(sol>=0?"+":"")+fCAD(sol); se.className="bud-card-val "+(sol>=0?"tg2":"tr3");
+        const ce=document.getElementById("bc-cum"); ce.textContent=(cum>=0?"+":"")+fCAD(cum); ce.className="bud-card-val "+(cum>=0?"tg2":"tr3");
+        document.getElementById("bs-rev-total").textContent=fCAD(rT);
+        document.getElementById("bs-dep-total").textContent=fCAD(dT);
+        // Mettre à jour épargne totale si on est sur mars 2026
+        if (budIdx === 0) {
+            const sp=sommePlacee(), base=baseEpargne();
+            document.getElementById("b-somme-placee").textContent=fCAD(sp);
+            document.getElementById("b-epargne-total").textContent=fCAD(base);
+        }
+    }
+    saveData();
+    renderBudgetChart();
+    scheduleSave();
+}
+
+function renderBudRows(cid, section, items, y, m) {
+    const data=getBM(y,m);
+    const ov=(budOv[mKey(y,m)]||{})[section]||{};
+    const ovR=(budOv[mKey(y,m)]||{})[section+'_reel']||{};
+    const isRev=section==='revenus';
+    const c=document.getElementById(cid); c.innerHTML="";
+
+    // En-tête colonnes
+    const hdr=document.createElement("div"); hdr.className="bud-col-heads";
+    hdr.innerHTML=`<span></span><span class="bud-ch">Catégorie</span>
+        <span class="bud-ch">Prévision</span>
+        <span class="bud-ch">Réel</span>
+        <span class="bud-ch">Écart</span>`;
+    c.appendChild(hdr);
+
+    let totPrev=0, totReel=0;
+    items.forEach(({key,label,icon})=>{
+        const prev=parseFloat(data[section][key])||0;
+        const reel=parseFloat(ovR[key])||0;
+        const mod=ov[key]!==undefined;
+        const hasR=reel>0;
+        const pct=hasR&&prev>0?((reel-prev)/prev*100):null;
+        totPrev+=prev; totReel+=reel;
+
+        const div=document.createElement("div"); div.className="bud-drow";
+        div.innerHTML=`
+            <span style="font-size:15px;text-align:center">${icon}</span>
+            <span style="font-size:13px;font-weight:600;color:var(--t2)">${label}</span>
+            <input class="bud-dinp${mod?" mod":""}" type="number" value="${prev}" step="0.01" min="0"
+                   title="Prévision ${label}"
+                   onchange="setBudOv(${y},${m},'${section}','${key}',this.value)"
+                   onfocus="this.select()">
+            <input class="bud-dinp reel${hasR?" has-val":""}" type="number"
+                   value="${hasR?reel:''}" step="0.01" min="0" placeholder="—"
+                   title="Réel ${label}"
+                   onchange="setBudReel(${y},${m},'${section}','${key}',this.value)"
+                   onfocus="this.select()">
+            <span class="bud-ecart ${ecartClass(pct,isRev)}">${ecartTxt(pct)}</span>`;
+        c.appendChild(div);
+    });
+
+    // Ligne total
+    const totPct=totReel>0&&totPrev>0?((totReel-totPrev)/totPrev*100):null;
+    const tot=document.createElement("div"); tot.className="bud-tot-row";
+    tot.innerHTML=`
+        <span class="bud-tot-lbl">Total</span>
+        <span class="bud-tot-val">${fCAD(totPrev)}</span>
+        <span class="bud-tot-val ${totReel>0?(isRev?"tg2":"tr3"):""}">${totReel>0?fCAD(totReel):'—'}</span>
+        <span class="bud-ecart ${ecartClass(totPct,isRev)}">${ecartTxt(totPct)}</span>`;
+    c.appendChild(tot);
+
+    // Mettre à jour meta dans le header de section
+    const metaId=isRev?'bs-rev-meta':'bs-dep-meta';
+    const metaEl=document.getElementById(metaId);
+    if(metaEl){
+        if(totReel>0&&totPrev>0){
+            const p=((totReel-totPrev)/totPrev*100);
+            metaEl.textContent=`Réel : ${fCAD(totReel)} · ${p>=0?'+':''}${p.toFixed(1)}%`;
+            metaEl.style.color=(isRev?(p>=0?'var(--green)':'var(--red)'):(p<=0?'var(--green)':'var(--red)'));
+        } else {
+            metaEl.textContent='';
+        }
+    }
+}
+
+function renderBudget() {
+    const {year,month}=ALL_BM[budIdx];
+    const data=getBM(year,month);
+    const rT=sumO(data.revenus), dT=sumO(data.depenses), sol=rT-dT, cum=cumul(budIdx);
+
+    document.getElementById("bud-month-lbl").textContent=BML[month]+" "+year;
+    document.getElementById("bud-month-sub").textContent=`Mois ${budIdx+1} / ${ALL_BM.length}`;
+
+    document.getElementById("bc-rev").textContent=fCAD(rT);
+    document.getElementById("bc-dep").textContent=fCAD(dT);
+    const se=document.getElementById("bc-sol"); se.textContent=(sol>=0?"+":"")+fCAD(sol); se.className="bud-card-val "+(sol>=0?"tg2":"tr3");
+    const ce=document.getElementById("bc-cum"); ce.textContent=(cum>=0?"+":"")+fCAD(cum); ce.className="bud-card-val "+(cum>=0?"tg2":"tr3");
+    document.getElementById("bs-rev-total").textContent=fCAD(rT);
+    document.getElementById("bs-dep-total").textContent=fCAD(dT);
+
+    document.getElementById("bud-prev").disabled=(budIdx===0);
+    document.getElementById("bud-next").disabled=(budIdx===ALL_BM.length-1);
+
+    // Carte épargne initiale — uniquement Mars 2026
+    const eCard = document.getElementById("epargne-init-card");
+    if (budIdx === 0) {
+        eCard.style.display = "block";
+        const sp = sommePlacee();
+        const base = baseEpargne();
+        document.getElementById("inp-epargne-init").value = epargneInitiale;
+        document.getElementById("b-somme-placee").textContent = fCAD(sp);
+        document.getElementById("b-epargne-total").textContent = fCAD(base);
+    } else {
+        eCard.style.display = "none";
+    }
+
+    renderBudRows("rev-rows","revenus", budREV_ITEMS, year, month);
+    renderBudRows("dep-rows","depenses",budDEP_ITEMS, year, month);
+    renderBudgetChart();
+}
+
+function renderBudgetChart() {
+    const labels = ALL_BM.map(({year,month})=>BM[month]+" '"+String(year).slice(2));
+    const soldes = ALL_BM.map(({year,month})=>{const d=getBM(year,month);return sumO(d.revenus)-sumO(d.depenses);});
+    const cumuls=[]; let c=baseEpargne(); soldes.forEach(s=>{c+=s;cumuls.push(c);});
+    const bgColors=soldes.map(s=>s>=0?"rgba(0,180,138,0.78)":"rgba(229,64,74,0.78)");
+    const bdrColors=soldes.map(s=>s>=0?"#00b48a":"#e5404a");
+
+    const ctx=document.getElementById("budgetChart");
+    if(!ctx) return;
+
+    // Mise à jour en place si le graphique existe déjà
+    if(budChart) {
+        budChart.data.datasets[0].data = soldes;
+        budChart.data.datasets[0].backgroundColor = bgColors;
+        budChart.data.datasets[0].borderColor = bdrColors;
+        budChart.data.datasets[1].data = cumuls;
+        budChart.update("active");
+        return;
+    }
+
+    budChart=new Chart(ctx.getContext("2d"),{
+        data:{
+            labels,
+            datasets:[
+                {type:"bar",  label:"Solde mensuel",  data:soldes, backgroundColor:bgColors, borderColor:bdrColors, borderWidth:1, borderRadius:4, yAxisID:"y"},
+                {type:"line", label:"Épargne cumulée",data:cumuls, borderColor:"#5147e8", backgroundColor:"rgba(81,71,232,0.05)", borderWidth:2.5, fill:true, tension:0.35, pointRadius:2, pointBackgroundColor:"#5147e8", pointHoverRadius:5, yAxisID:"y"}
+            ]
+        },
+        options:{
+            responsive:true, maintainAspectRatio:false,
+            plugins:{
+                legend:{display:false},
+                tooltip:{backgroundColor:"#fff",borderColor:"#e4e7f0",borderWidth:1,
+                         bodyColor:"#0f1117",titleColor:"#9aa0b4",
+                         bodyFont:{size:13,weight:"700",family:"Inter"},
+                         titleFont:{size:11,family:"Inter"},padding:11,
+                         callbacks:{label:c=>c.dataset.label+": "+fCAD(c.raw)}}
+            },
+            scales:{
+                x:{grid:{display:false},border:{display:false},
+                   ticks:{color:"#9aa0b4",font:{size:9.5,family:"Inter"},maxRotation:45}},
+                y:{position:"right",grid:{color:"#f0f2f8"},border:{display:false},
+                   ticks:{color:"#9aa0b4",font:{size:10,family:"Inter"},callback:v=>fCAD(v)}}
+            },
+            interaction:{mode:"index",intersect:false}
+        }
+    });
+}
+
+
+// ── Exposition globale (nécessaire pour les onclick= dans le HTML) ──
+window.refreshAll       = refreshAll;
+window.switchPage       = switchPage;
+window.openModal        = openModal;
+window.closeModal       = closeModal;
+window.addHolding       = addHolding;
+window.delHolding       = delHolding;
+window.setPeriod        = setPeriod;
+window.setMode          = setMode;
+window.budPrev          = budPrev;
+window.budNext          = budNext;
+window.setBudOv         = setBudOv;
+window.setBudReel       = setBudReel;
+window.setEpargneInit   = setEpargneInit;
 // ══════════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════════
-renderAll();
-loadChartData(currentPeriod);
+loadData();          // charger depuis localStorage
+loadData();
+renderBudget();      // initialiser la page budget
+if (investments.length > 0) fetchAllPrices();  // rafraîchir les prix au démarrage
 </script>
 </body>
 </html>
